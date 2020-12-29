@@ -14,6 +14,7 @@ on:
 #    - cron: 0 8 * * 5
 env:
   UPLOAD_RELEASE: true
+  UPLOAD_FIRMWARE: true
 jobs:
 
   build_openwrt:
@@ -101,6 +102,16 @@ jobs:
 #          ./transfer wet -s -p 16 --no-progress ./new/firmware 2>&1 | tee wetransfer.log
 #          echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
 #添加上传到release  
+      - name: Organize files
+        id: organize
+        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        run: |
+          #cd openwrt/bin/targets/*/*
+          #rm -rf packages
+          cd ./new/package
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "::set-output name=status::success"
+          
       - name: Generate release tag
         id: tag
         if: env.UPLOAD_RELEASE == 'true' && !cancelled()
@@ -109,6 +120,7 @@ jobs:
           touch release.txt
           echo "🔗$(date +"%Y.%m.%d-%H%M")编译完成上传" >> release.txt
           echo "::set-output name=status::success"
+          
       - name: Upload firmware to release
         uses: softprops/action-gh-release@v1
         if: steps.tag.outputs.status == 'success' && !cancelled()
