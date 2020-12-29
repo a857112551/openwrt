@@ -51,7 +51,8 @@ jobs:
           ./scripts/feeds update -a
       - name: Update package
         run: |
-          curl -fsSL https://git.io/JUgLH | sh
+          #curl -fsSL https://git.io/JUgLH | sh
+          ./update_package_all.sh
           ./scripts/feeds install -a
           chmod -R 755 .
       - name: Generate configuration file
