@@ -112,7 +112,8 @@ jobs:
           #cd openwrt/bin/targets/*/*
           #rm -rf packages
           cd ./new/firmware
-          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          #echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "FIRMWARE=./new/firmware" >> $GITHUB_ENV
           echo "::set-output name=status::success"
           
       - name: Generate release tag
